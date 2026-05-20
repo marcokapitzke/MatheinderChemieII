@@ -1,6 +1,6 @@
 import { ArrowRight, Atom, BookMarked, BrainCircuit, Cpu, ShieldCheck } from "lucide-react";
 import { modules, type RouteId } from "../data/modules";
-import { HydrogenAtomScene } from "./HydrogenAtomScene";
+import { FourierHeroScene } from "./FourierHeroScene";
 import { MathFormula } from "./MathFormula";
 
 interface HomePageProps {
@@ -34,7 +34,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             </div>
           </div>
 
-          <HydrogenAtomScene />
+          <FourierHeroScene />
         </div>
       </section>
 
