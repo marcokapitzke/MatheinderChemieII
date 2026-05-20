@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { analyzeVectors, cross, dot, gramSchmidtProcess, norm, project } from "./vectorMath";
+import { analyzeVectors, cross, dot, gramSchmidtProcess, norm, project, scale } from "./vectorMath";
 
 describe("vector math", () => {
   it("computes norm, dot product, cross product, angle and projection", () => {
@@ -7,6 +7,7 @@ describe("vector math", () => {
     expect(dot([1, 2, 3], [4, 5, 6])).toBeCloseTo(32);
     expect(cross([1, 0, 0], [0, 1, 0])).toEqual([0, 0, 1]);
     expect(project([2, 2], [1, 0])).toEqual([2, 0]);
+    expect(scale([3, -1], -2)).toEqual([-6, 2]);
   });
 
   it("orthonormalizes independent vectors", () => {

@@ -17,12 +17,12 @@ export function MultivariableModule({ onNavigate }: Props) {
   const result = useMemo(() => analyzeMultivariable(input, -range, range), [input, range]);
 
   return (
-    <CalculatorLayout
+      <CalculatorLayout
       route="multivar"
-      title="Mehrdimensionale Analysis"
+      title="Mehrdimensionale Analysis Visualisierer"
       eyebrow="Funktionen mehrerer Variablen"
       chapter="Band II: Mehrdimensionale Analysis"
-      description="Visualisiert f(x,y), Konturlinien, partielle Ableitungen, Gradienten, Hesse-Matrix und Rechteckintegrale."
+      description="Visualisiert f(x,y), Konturlinien, Gradienten, Hesse-Matrix und rechteckige Integrationsbereiche."
       onNavigate={onNavigate}
       supported={[
         "f(x,y) mit x und y",
@@ -74,6 +74,9 @@ export function MultivariableModule({ onNavigate }: Props) {
             <article className="result-card">
               <p className="eyebrow">Gradient</p>
               <MathFormula block tex={`\\nabla f=${result.gradientTex}`} />
+              {result.directionalDerivative ? (
+                <MathFormula block tex={`D_{u}f(0,0)\\approx ${result.directionalDerivative.value.toFixed(5)},\\quad u=${result.directionalDerivative.directionTex}`} />
+              ) : null}
               {result.criticalPoint ? (
                 <p>
                   Kritischer Punkt bei (0,0): <strong>{result.criticalPoint.type}</strong>.
@@ -137,8 +140,8 @@ export function MultivariableModule({ onNavigate }: Props) {
           </section>
 
           <section className="result-card">
-            <p className="eyebrow">Methode</p>
-            <DetailedSteps steps={result.steps.map((step, index) => ({ title: `Schritt ${index + 1}`, text: step }))} />
+            <p className="eyebrow">Plotmethode</p>
+            <DetailedSteps summary="Wie wurde der Plot bestimmt?" steps={result.steps.map((step, index) => ({ title: `Schritt ${index + 1}`, text: step }))} />
           </section>
         </>
       ) : (

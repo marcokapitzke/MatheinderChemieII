@@ -49,7 +49,7 @@ export default function App() {
       {route === "fourier" ? <FourierModule onNavigate={navigate} /> : null}
       <footer className="site-footer">
         <div className="section-shell footer-inner">
-          <span>MathChem II</span>
+          <span>Mathe für Chemie II</span>
           <a href="https://marcokapitzke.github.io/MatheinderChemie/" target="_blank" rel="noreferrer">
             MathChem I öffnen
           </a>

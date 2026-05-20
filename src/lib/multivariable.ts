@@ -8,6 +8,7 @@ export interface MultivarAnalysis {
   partials: Record<string, string>;
   gradientTex: string;
   hessianTex: string | null;
+  directionalDerivative: { directionTex: string; value: number } | null;
   criticalPoint: { x: number; y: number; type: string } | null;
   integral: number | null;
   surface: { xs: number[]; ys: number[]; z: number[][] };
@@ -41,6 +42,7 @@ export function analyzeMultivariable(input: string, min = -2.5, max = 2.5): Mult
 
     const surface = sampleSurface(evaluator, variables, min, max, 45);
     const criticalPoint = variables.length === 2 ? classifyOriginCriticalPoint(partials, secondX, secondY, mixed) : null;
+    const directionalDerivative = variables.length === 2 ? directionalDerivativeAtOrigin(partials) : null;
     const integral = variables.length === 2 ? integrateRectangle(evaluator, min, max, min, max, 80) : null;
 
     return {
@@ -50,6 +52,7 @@ export function analyzeMultivariable(input: string, min = -2.5, max = 2.5): Mult
       partials,
       gradientTex: `\\left(${variables.map((variable) => expressionToTex(partials[variable])).join(", ")}\\right)`,
       hessianTex,
+      directionalDerivative,
       criticalPoint,
       integral,
       surface,
@@ -64,6 +67,20 @@ export function analyzeMultivariable(input: string, min = -2.5, max = 2.5): Mult
     };
   } catch {
     return { ok: false, message: "Dieser Fall liegt außerhalb der unterstützten Standardfälle der mehrdimensionalen Analysis." };
+  }
+}
+
+export function directionalDerivativeAtOrigin(partials: Record<string, string>) {
+  try {
+    const scope = { x: 0, y: 0, pi: Math.PI, e: Math.E };
+    const fx0 = Number(math.evaluate(normalizeExpression(partials.x), scope));
+    const fy0 = Number(math.evaluate(normalizeExpression(partials.y), scope));
+    const factor = 1 / Math.sqrt(2);
+    const value = factor * (fx0 + fy0);
+    if (!Number.isFinite(value)) return null;
+    return { directionTex: "\\frac{1}{\\sqrt{2}}(1,1)", value };
+  } catch {
+    return null;
   }
 }
 

@@ -53,7 +53,7 @@ export function analyzeMatrix(matrixInput: string, vectorInput: string): MatrixA
   if (!matrix) return { ok: false, message: "Bitte gib eine Matrix zeilenweise ein, z. B. 2,1; 1,3." };
   if (!vector) return { ok: false, message: "Bitte gib die rechte Seite b als Spalte ein, z. B. 1; 2." };
   if (matrix.length !== vector.length) return { ok: false, message: "Die Zeilenzahl von A muss zur Länge von b passen." };
-  if (matrix.length > 4 || matrix[0].length > 4) return { ok: false, message: "Diese Beta unterstützt Matrizen bis 4x4." };
+  if (matrix.length > 4 || matrix[0].length > 4) return { ok: false, message: "Diese Version unterstützt Matrizen bis 4x4." };
 
   const augmented = matrix.map((row, index) => [...row, vector[index]]);
   const elimination = rrefWithSteps(augmented);
@@ -83,6 +83,15 @@ export function analyzeMatrix(matrixInput: string, vectorInput: string): MatrixA
 export function addMatrices(a: Matrix, b: Matrix): Matrix | null {
   if (a.length !== b.length || a[0].length !== b[0].length) return null;
   return a.map((row, i) => row.map((value, j) => value + b[i][j]));
+}
+
+export function subtractMatrices(a: Matrix, b: Matrix): Matrix | null {
+  if (a.length !== b.length || a[0].length !== b[0].length) return null;
+  return a.map((row, i) => row.map((value, j) => value - b[i][j]));
+}
+
+export function scaleMatrix(matrix: Matrix, factor: number): Matrix {
+  return matrix.map((row) => row.map((value) => clean(value * factor)));
 }
 
 export function multiplyMatrices(a: Matrix, b: Matrix): Matrix | null {

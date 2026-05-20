@@ -28,10 +28,10 @@ export function FourierModule({ onNavigate }: Props) {
       onNavigate={onNavigate}
       supported={[
         "Standardfunktionen mit numerischer Fourier-Darstellung",
-        "Gauß, Rechteck, gedämpfte Schwingung und zwei Frequenzen",
+        "Gauß, Rechteck, Dreieck, beidseitiger Exponentialabfall, Lorentz-Linie, Cosinus und gedämpfte Schwingung",
         "Interferogramm zu Spektrum als didaktische DFT-Simulation",
         "Konvention F(k)=∫ f(x) exp(-ikx) dx",
-        "freie symbolische Fourier-Transformation nicht Teil der Beta"
+        "freie symbolische Fourier-Transformation nicht Teil dieses Rechners"
       ]}
       aside={
         <details className="examples" open>
@@ -68,6 +68,10 @@ export function FourierModule({ onNavigate }: Props) {
         <select id="preset-select" value={preset} onChange={(event) => setPreset(event.target.value as FourierPreset)}>
           <option value="gaussian">Gaußfunktion</option>
           <option value="rect">Rechteckfunktion</option>
+          <option value="triangle">Dreiecksignal</option>
+          <option value="two-sided-exp">Beidseitiger Exponentialabfall</option>
+          <option value="lorentzian">Lorentz-Linie</option>
+          <option value="cosine">Cosinus-Schwingung</option>
           <option value="damped">Gedämpfte Schwingung</option>
           <option value="twofreq">Zwei nahe Frequenzen</option>
           <option value="wide-gaussian">Breites Signal</option>
@@ -108,14 +112,6 @@ export function FourierModule({ onNavigate }: Props) {
         </section>
       )}
 
-      <section className="result-card">
-        <p className="eyebrow">Didaktische Lesart</p>
-        <div className="insight-grid">
-          <span>Schmal im Ursprungsbereich bedeutet breit im Fourier-Bereich.</span>
-          <span>Stärkere Dämpfung verbreitert Spektrallinien.</span>
-          <span>Längere Messbereiche trennen nahe Frequenzen besser.</span>
-        </div>
-      </section>
     </CalculatorLayout>
   );
 }

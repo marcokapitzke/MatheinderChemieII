@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { addMatrices, analyzeMatrix, determinant, inverse, multiplyMatrices, rank } from "./matrixMath";
+import { addMatrices, analyzeMatrix, determinant, inverse, multiplyMatrices, rank, scaleMatrix, subtractMatrices } from "./matrixMath";
 
 describe("matrix math", () => {
   it("computes addition, multiplication, determinants and inverse", () => {
     expect(addMatrices([[1, 2]], [[3, 4]])).toEqual([[4, 6]]);
+    expect(subtractMatrices([[1, 2]], [[3, 4]])).toEqual([[-2, -2]]);
+    expect(scaleMatrix([[1, -2]], 3)).toEqual([[3, -6]]);
     expect(
       multiplyMatrices(
         [

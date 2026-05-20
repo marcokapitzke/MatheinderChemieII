@@ -13,7 +13,7 @@ export function Header({ route, onNavigate }: LayoutProps) {
       <nav className="nav section-shell" aria-label="Hauptnavigation">
         <button className="brand" type="button" onClick={() => onNavigate("home")} aria-label="Startseite">
           <Atom size={19} />
-          <span>MathChem II</span>
+          <span>Mathe für Chemie II</span>
         </button>
         <div className="nav-links">
           {modules.map((module) => (

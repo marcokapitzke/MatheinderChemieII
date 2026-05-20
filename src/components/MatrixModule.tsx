@@ -1,10 +1,25 @@
 import { useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { matrixExamples, type RouteId } from "../data/modules";
-import { analyzeMatrix, formatNumber, matrixToTex, vectorToColumnTex } from "../lib/matrixMath";
+import {
+  addMatrices,
+  analyzeMatrix,
+  formatNumber,
+  matrixToTex,
+  multiplyMatrices,
+  parseMatrix,
+  scaleMatrix,
+  subtractMatrices,
+  vectorToColumnTex
+} from "../lib/matrixMath";
 import { CalculatorLayout, DetailedSteps } from "./CalculatorLayout";
 import { MathFormula } from "./MathFormula";
 import { PlotPanel, type Trace } from "./PlotPanel";
+
+const matrixATex = "\\mathbf{A}";
+const matrixBTex = "\\mathbf{B}";
+const vectorXTex = "\\mathbf{x}";
+const vectorBTex = "\\mathbf{b}";
 
 interface Props {
   onNavigate: (route: RouteId) => void;
@@ -12,8 +27,20 @@ interface Props {
 
 export function MatrixModule({ onNavigate }: Props) {
   const [matrixInput, setMatrixInput] = useState("2,1; 1,3");
+  const [matrixBInput, setMatrixBInput] = useState("1,0; 0,1");
   const [vectorInput, setVectorInput] = useState("1; 2");
+  const [matrixScalar, setMatrixScalar] = useState(2);
   const result = useMemo(() => analyzeMatrix(matrixInput, vectorInput), [matrixInput, vectorInput]);
+  const matrixB = useMemo(() => parseMatrix(matrixBInput), [matrixBInput]);
+  const matrixOperations = useMemo(() => {
+    if (!result.ok || !matrixB) return null;
+    return {
+      sum: addMatrices(result.matrix, matrixB),
+      difference: subtractMatrices(result.matrix, matrixB),
+      product: multiplyMatrices(result.matrix, matrixB),
+      scaled: scaleMatrix(result.matrix, matrixScalar)
+    };
+  }, [matrixB, matrixScalar, result]);
 
   return (
     <CalculatorLayout
@@ -40,6 +67,7 @@ export function MatrixModule({ onNavigate }: Props) {
                 key={example.label}
                 onClick={() => {
                   setMatrixInput(example.matrix);
+                  setMatrixBInput(example.matrixB);
                   setVectorInput(example.vector);
                 }}
               >
@@ -55,6 +83,8 @@ export function MatrixModule({ onNavigate }: Props) {
       <div className="input-card">
         <label htmlFor="matrix-input">Koeffizientenmatrix A</label>
         <textarea id="matrix-input" value={matrixInput} onChange={(event) => setMatrixInput(event.target.value)} />
+        <label htmlFor="matrix-b-input">Matrix B für Operationen</label>
+        <textarea id="matrix-b-input" value={matrixBInput} onChange={(event) => setMatrixBInput(event.target.value)} />
         <label htmlFor="rhs-input">Rechte Seite b</label>
         <div className="input-row">
           <input id="rhs-input" value={vectorInput} onChange={(event) => setVectorInput(event.target.value)} />
@@ -62,6 +92,8 @@ export function MatrixModule({ onNavigate }: Props) {
             <RotateCcw size={18} />
           </button>
         </div>
+        <label htmlFor="matrix-scalar">Skalar μ für μA</label>
+        <input id="matrix-scalar" type="number" step={0.25} value={matrixScalar} onChange={(event) => setMatrixScalar(Number(event.target.value))} />
       </div>
 
       {result.ok ? (
@@ -69,23 +101,38 @@ export function MatrixModule({ onNavigate }: Props) {
           <section className="analysis-grid">
             <article className="result-card">
               <p className="eyebrow">Matrix A</p>
-              <MathFormula block tex={`A=${matrixToTex(result.matrix)}`} />
-              <MathFormula block tex={`\\operatorname{rang}(A)=${result.rank}`} />
-              {result.determinant !== null ? <MathFormula block tex={`\\det(A)=${formatNumber(result.determinant)}`} /> : null}
-              {result.trace !== null ? <MathFormula block tex={`\\operatorname{tr}(A)=${formatNumber(result.trace)}`} /> : null}
+              <MathFormula block tex={`${matrixATex}=${matrixToTex(result.matrix)}`} />
+              <MathFormula block tex={`\\operatorname{rang}(${matrixATex})=${result.rank}`} />
+              {result.determinant !== null ? <MathFormula block tex={`\\det(${matrixATex})=${formatNumber(result.determinant)}`} /> : null}
+              {result.trace !== null ? <MathFormula block tex={`\\operatorname{tr}(${matrixATex})=${formatNumber(result.trace)}`} /> : null}
             </article>
             <article className="result-card">
-              <p className="eyebrow">Lösung von A x = b</p>
-              <MathFormula block tex={`b=${vectorToColumnTex(result.vector)}`} />
-              {result.solutionStatus === "unique" && result.solution ? <MathFormula block tex={`x=${vectorToColumnTex(result.solution)}`} /> : null}
+              <p className="eyebrow">Lösung des linearen Systems</p>
+              <MathFormula block tex={`${vectorBTex}=${vectorToColumnTex(result.vector)}`} />
+              {result.solutionStatus === "unique" && result.solution ? <MathFormula block tex={`${vectorXTex}=${vectorToColumnTex(result.solution)}`} /> : null}
               {result.solutionStatus === "none" ? <p>Das System ist inkonsistent und besitzt keine Lösung.</p> : null}
               {result.solutionStatus === "infinite" ? <p>Das System besitzt unendlich viele Lösungen.</p> : null}
             </article>
             <article className="result-card">
               <p className="eyebrow">Inverse / Transposition</p>
-              <MathFormula block tex={`A^T=${matrixToTex(result.transpose)}`} />
-              {result.inverse ? <MathFormula block tex={`A^{-1}=${matrixToTex(result.inverse)}`} /> : <p>Diese Matrix besitzt keine inverse Matrix.</p>}
+              <MathFormula block tex={`${matrixATex}^{\\mathsf{T}}=${matrixToTex(result.transpose)}`} />
+              {result.inverse ? <MathFormula block tex={`${matrixATex}^{-1}=${matrixToTex(result.inverse)}`} /> : <p>Diese Matrix besitzt keine inverse Matrix.</p>}
             </article>
+          </section>
+
+          <section className="result-card result-card--wide">
+            <p className="eyebrow">Matrixoperationen mit B</p>
+            {matrixB && matrixOperations ? (
+              <div className="formula-list">
+                <MathFormula block tex={`${matrixBTex}=${matrixToTex(matrixB)}`} />
+                {matrixOperations.sum ? <MathFormula block tex={`${matrixATex}+${matrixBTex}=${matrixToTex(matrixOperations.sum)}`} /> : <p>Die Summe ist nur für gleich große Matrizen definiert.</p>}
+                {matrixOperations.difference ? <MathFormula block tex={`${matrixATex}-${matrixBTex}=${matrixToTex(matrixOperations.difference)}`} /> : <p>Die Differenz ist nur für gleich große Matrizen definiert.</p>}
+                {matrixOperations.product ? <MathFormula block tex={`${matrixATex}${matrixBTex}=${matrixToTex(matrixOperations.product)}`} /> : <p>Das Produkt ist nur definiert, wenn die Spaltenzahl der ersten Matrix zur Zeilenzahl der zweiten Matrix passt.</p>}
+                <MathFormula block tex={`${formatNumber(matrixScalar)}${matrixATex}=${matrixToTex(matrixOperations.scaled)}`} />
+              </div>
+            ) : (
+              <p>Bitte gib B als Matrix mit Zahlen ein, z. B. 1,0; 0,1.</p>
+            )}
           </section>
 
           {result.matrix.length === 2 && result.matrix[0].length === 2 ? (
@@ -97,7 +144,7 @@ export function MatrixModule({ onNavigate }: Props) {
 
           <section className="result-card result-card--wide">
             <p className="eyebrow">Gauß-Elimination</p>
-            <MathFormula block tex={`\\operatorname{rref}(A)=${matrixToTex(result.rref)}`} />
+            <MathFormula block tex={`\\operatorname{rref}(${matrixATex})=${matrixToTex(result.rref)}`} />
             <DetailedSteps
               steps={result.rowSteps.map((step, index) => ({
                 title: `Zeilenumformung ${index + 1}`,

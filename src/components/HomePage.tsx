@@ -14,13 +14,14 @@ export function HomePage({ onNavigate }: HomePageProps) {
         <div className="section-shell hero-grid">
           <div className="hero-text">
             <p className="eyebrow">Begleitplattform zum zweiten Band</p>
-            <h1 className="hero-title">
-              <span className="title-line title-line--keep">MathChem II</span>
+            <h1 className="hero-title hero-title--chem">
+              <span className="title-line title-line--keep">Interaktive Mathematik</span>
+              <span className="title-line title-line--keep">für die (Bio-)Chemie II</span>
             </h1>
-            <p className="hero-subtitle">Interaktive Mathematik für den zweiten&nbsp;Band</p>
+            <p className="hero-subtitle">Der interaktive Rechner zum zweiten Band.</p>
             <p className="hero-copy">
-              Diese Plattform begleitet den zweiten Band des Buchprojekts mit interaktiven Visualisierungen und Rechnern zu Vektoren, Matrizen,
-              Differentialgleichungen, mehrdimensionaler Analysis und Fourier-Transformation.
+              Ein digitales Mathematik-Labor für Standardaufgaben aus dem naturwissenschaftlichen Grundstudium: Vektoren, Matrizen,
+              Differentialgleichungen, mehrdimensionale Analysis und Fourier-Transformation.
             </p>
             <div className="hero-actions">
               <button type="button" className="button button-primary" onClick={() => onNavigate("vectors")}>
@@ -51,7 +52,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           </span>
           <span>
             <strong>Buch erscheint bald</strong>
-            <small>MathChem II: interaktive Begleitplattform im Aufbau</small>
+            <small>Interaktive Begleitplattform im Aufbau</small>
           </span>
         </div>
       </section>

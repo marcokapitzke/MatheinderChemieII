@@ -17,4 +17,10 @@ describe("multivariable analysis", () => {
     expect(result.ok).toBe(true);
     if (result.ok) expect(result.integral).toBeCloseTo(1, 2);
   });
+
+  it("computes a standard directional derivative at the origin", () => {
+    const result = analyzeMultivariable("x^2 + y", -1, 1);
+    expect(result.ok).toBe(true);
+    if (result.ok) expect(result.directionalDerivative?.value).toBeCloseTo(1 / Math.sqrt(2), 8);
+  });
 });

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { vectorExamples, type RouteId } from "../data/modules";
-import { analyzeVectors, formatNumber, formatVector, type Vector } from "../lib/vectorMath";
+import { analyzeVectors, formatNumber, formatVector, scale, type Vector } from "../lib/vectorMath";
 import { CalculatorLayout, DetailedSteps } from "./CalculatorLayout";
 import { MathFormula } from "./MathFormula";
 import { PlotPanel, type Trace } from "./PlotPanel";
@@ -13,6 +13,7 @@ interface Props {
 
 export function VectorModule({ onNavigate }: Props) {
   const [input, setInput] = useState("v1=(1,1,0), v2=(1,0,1), v3=(0,1,1)");
+  const [scalar, setScalar] = useState(2);
   const result = useMemo(() => analyzeVectors(input), [input]);
 
   return (
@@ -34,7 +35,14 @@ export function VectorModule({ onNavigate }: Props) {
           <summary>Beispielaufgaben</summary>
           <div className="example-grid">
             {vectorExamples.map((example) => (
-              <button type="button" key={example.label} onClick={() => setInput(example.value)}>
+              <button
+                type="button"
+                key={example.label}
+                onClick={() => {
+                  setInput(example.value);
+                  if (typeof example.scalar === "number") setScalar(example.scalar);
+                }}
+              >
                 <strong>{example.label}</strong>
                 <span>{example.value}</span>
                 <small>{example.note}</small>
@@ -52,6 +60,8 @@ export function VectorModule({ onNavigate }: Props) {
             <RotateCcw size={18} />
           </button>
         </div>
+        <label htmlFor="vector-scalar">Skalar λ für v1</label>
+        <input id="vector-scalar" type="number" step={0.25} value={scalar} onChange={(event) => setScalar(Number(event.target.value))} />
       </div>
 
       {result.ok ? (
@@ -61,6 +71,7 @@ export function VectorModule({ onNavigate }: Props) {
               <p className="eyebrow">Operationen</p>
               {result.sum ? <MathFormula block tex={`v_1+v_2=${formatVector(result.sum)}`} /> : null}
               {result.difference ? <MathFormula block tex={`v_1-v_2=${formatVector(result.difference)}`} /> : null}
+              <MathFormula block tex={`${formatNumber(scalar)}v_1=${formatVector(scale(result.vectors[0], scalar))}`} />
               {result.dot !== null ? <MathFormula block tex={`v_1\\cdot v_2=${formatNumber(result.dot)}`} /> : null}
               {result.cross ? <MathFormula block tex={`v_1\\times v_2=${formatVector(result.cross)}`} /> : null}
             </article>

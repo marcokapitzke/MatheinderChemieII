@@ -1,4 +1,14 @@
-export type FourierPreset = "gaussian" | "wide-gaussian" | "narrow-gaussian" | "rect" | "damped" | "twofreq";
+export type FourierPreset =
+  | "gaussian"
+  | "wide-gaussian"
+  | "narrow-gaussian"
+  | "rect"
+  | "triangle"
+  | "two-sided-exp"
+  | "lorentzian"
+  | "cosine"
+  | "damped"
+  | "twofreq";
 
 export interface FourierData {
   xs: number[];
@@ -55,6 +65,10 @@ export function signalValue(preset: FourierPreset, x: number, width: number, fre
     return Math.exp(-(x * x) / (2 * sigma * sigma));
   }
   if (preset === "rect") return Math.abs(x) <= width ? 1 : 0;
+  if (preset === "triangle") return Math.max(0, 1 - Math.abs(x) / width);
+  if (preset === "two-sided-exp") return Math.exp(-Math.abs(x) / Math.max(width, 0.05));
+  if (preset === "lorentzian") return 1 / (1 + (x * x) / (width * width));
+  if (preset === "cosine") return Math.cos(frequency * x);
   if (preset === "damped") return x >= 0 ? Math.exp(-damping * x) * Math.cos(frequency * x) : 0;
   if (preset === "twofreq") return Math.cos(frequency * x) + 0.75 * Math.cos((frequency + 0.75) * x);
   return 0;
@@ -91,6 +105,10 @@ function positiveDft(signal: number[], spacing = 1): Array<{ re: number; im: num
 
 function descriptionFor(preset: FourierPreset) {
   if (preset === "rect") return "Rechteckfunktionen erzeugen eine Sinc-artige Spektralstruktur mit Nebenmaxima.";
+  if (preset === "triangle") return "Ein Dreiecksignal besitzt ein Spektrum mit stärker gedämpften Nebenmaxima als das Rechtecksignal.";
+  if (preset === "two-sided-exp") return "Ein beidseitiger Exponentialabfall führt zu einer glatten, Lorentz-artigen Spektralform.";
+  if (preset === "lorentzian") return "Eine Lorentz-artige Linie zeigt breite Flanken im Signal und eine glatte, exponentiell geprägte Fourier-Struktur.";
+  if (preset === "cosine") return "Eine reine Cosinus-Schwingung konzentriert die Fourier-Amplitude bei den beiden Frequenzen ±k.";
   if (preset === "damped") return "Eine gedämpfte Schwingung erzeugt einen verbreiterten Peak im Frequenzbereich.";
   if (preset === "twofreq") return "Zwei nahe Frequenzen zeigen, wie Messdauer und Dämpfung die Auflösung bestimmen.";
   if (preset === "wide-gaussian") return "Eine breite Gaußfunktion besitzt eine schmale Fourier-Verteilung.";

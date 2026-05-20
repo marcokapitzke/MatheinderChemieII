@@ -1,3 +1,6 @@
+import type { MathNode } from "mathjs";
+import { math } from "./mathCore";
+
 export interface OdeSolution {
   ok: true;
   type: string;
@@ -13,23 +16,35 @@ export interface OdeFailure {
 }
 
 const defaultInitial = { x0: 0, y0: 1 };
+const epsilon = 1e-10;
 
 export function solveOde(input: string): OdeSolution | OdeFailure {
   const normalized = input.replace(/\s+/g, "").replace(/−/g, "-");
 
-  const firstOrder = normalized.match(/^y'=([+-]?\d*\.?\d+)\*?y$/);
-  if (firstOrder) return exponentialSolution(Number(firstOrder[1]));
-
-  const firstOrderImplicit = normalized.match(/^y'\+([+-]?\d*\.?\d+)\*?y=([+-]?\d*\.?\d+)$/);
-  if (firstOrderImplicit) return linearConstantSolution(Number(firstOrderImplicit[1]), Number(firstOrderImplicit[2]));
-
   const logistic = normalized.match(/^y'=([+-]?\d*\.?\d+)\*?y\*\(1-y\/([+-]?\d*\.?\d+)\)$/);
   if (logistic) return logisticSolution(Number(logistic[1]), Number(logistic[2]));
 
-  const homogeneousSecond = normalized.match(/^y''\+([+-]?(?:\d*\.?\d+)?)\*?y'\+([+-]?(?:\d*\.?\d+)?)\*?y=0$/);
-  if (homogeneousSecond) return secondOrderHomogeneous(parseCoefficient(homogeneousSecond[1]), parseCoefficient(homogeneousSecond[2]));
+  const coefficients = equationCoefficients(normalized);
+  if (coefficients) {
+    if (nearZero(coefficients.ypp) && !nearZero(coefficients.yp)) {
+      const a = coefficients.y / coefficients.yp;
+      const b = -coefficients.constant / coefficients.yp;
+      if (nearZero(a)) return constantSlopeSolution(b);
+      if (nearZero(b)) return exponentialSolution(-a);
+      return linearConstantSolution(a, b);
+    }
+
+    if (!nearZero(coefficients.ypp)) {
+      const a = coefficients.yp / coefficients.ypp;
+      const b = coefficients.y / coefficients.ypp;
+      const forcing = -coefficients.constant / coefficients.ypp;
+      if (nearZero(forcing)) return secondOrderHomogeneous(a, b);
+      return secondOrderConstantForcing(a, b, forcing);
+    }
+  }
 
   if (normalized === "y''+y=sin(x)") return resonantOscillator();
+  if (normalized === "y''+y=cos(x)") return resonantCosineOscillator();
 
   return { ok: false, message: "Diese Differentialgleichung liegt außerhalb der unterstützten Standardfälle." };
 }
@@ -51,8 +66,24 @@ function exponentialSolution(k: number): OdeSolution {
   };
 }
 
+function constantSlopeSolution(slope: number): OdeSolution {
+  const xs = range(-2, 6, 240);
+  const ys = xs.map((x) => defaultInitial.y0 + slope * (x - defaultInitial.x0));
+  return {
+    ok: true,
+    type: "Direkt integrierbare DGL erster Ordnung",
+    general: `y(x)=C+${format(slope)}x`,
+    particular: `y(0)=1\\Rightarrow y(x)=1+${format(slope)}x`,
+    plot: { xs, ys },
+    steps: [
+      { title: "Standardform", text: "Die Gleichung wird zu y'=c umgestellt.", tex: `y'=${format(slope)}` },
+      { title: "Integration", text: "Eine konstante Ableitung liefert eine lineare Funktion.", tex: `y=C+${format(slope)}x` }
+    ]
+  };
+}
+
 function linearConstantSolution(a: number, b: number): OdeSolution | OdeFailure {
-  if (Math.abs(a) < 1e-10) return { ok: false, message: "Diese lineare Gleichung benötigt a ≠ 0." };
+  if (Math.abs(a) < 1e-10) return constantSlopeSolution(b);
   const steady = b / a;
   const c = defaultInitial.y0 - steady;
   const xs = range(0, 8, 240);
@@ -86,6 +117,26 @@ function logisticSolution(r: number, capacity: number): OdeSolution {
       { title: "Autonome Struktur", text: "Wachstum ist bei kleinen y fast exponentiell und sättigt bei K.", tex: `y'=r y\\left(1-\\frac{y}{K}\\right)` },
       { title: "Standardlösung", text: "Die trennbare Gleichung führt auf die logistische Kurve.", tex: `y(x)=\\frac{K}{1+C\\operatorname{exp}(-rx)}` },
       { title: "Anfangswert", text: "Aus y(0)=1 wird C=(K-y_0)/y_0 bestimmt." }
+    ]
+  };
+}
+
+function secondOrderConstantForcing(a: number, b: number, forcing: number): OdeSolution | OdeFailure {
+  if (nearZero(b)) {
+    return { ok: false, message: "Diese Differentialgleichung liegt außerhalb der unterstützten Standardfälle." };
+  }
+  const homogeneous = secondOrderHomogeneous(a, b);
+  const steady = forcing / b;
+  return {
+    ok: true,
+    type: "Lineare inhomogene DGL zweiter Ordnung mit konstantem Term",
+    general: `${homogeneous.general}+${format(steady)}`,
+    particular: `y_p=${format(steady)}`,
+    plot: { xs: homogeneous.plot.xs, ys: homogeneous.plot.ys.map((value) => value + steady) },
+    steps: [
+      { title: "Standardform", text: "Die Gleichung wird auf konstante Koeffizienten normiert.", tex: `y''+${format(a)}y'+${format(b)}y=${format(forcing)}` },
+      { title: "Konstante Partikulärlösung", text: "Für einen konstanten rechten Term wird y_p als Konstante angesetzt.", tex: `y_p=\\frac{${format(forcing)}}{${format(b)}}=${format(steady)}` },
+      { title: "Homogener Anteil", text: "Der Rest wird über das charakteristische Polynom gelöst.", tex: `r^2+${format(a)}r+${format(b)}=0` }
     ]
   };
 }
@@ -141,14 +192,132 @@ function resonantOscillator(): OdeSolution {
   };
 }
 
+function resonantCosineOscillator(): OdeSolution {
+  const xs = range(0, 16, 320);
+  const ys = xs.map((x) => 0.5 * x * Math.sin(x));
+  return {
+    ok: true,
+    type: "Lineare inhomogene DGL zweiter Ordnung",
+    general: `y=C_1\\cos(x)+C_2\\sin(x)+\\frac{x}{2}\\sin(x)`,
+    particular: `y_p(x)=\\frac{x}{2}\\sin(x)`,
+    plot: { xs, ys },
+    steps: [
+      { title: "Homogene Lösung", text: "Die Gleichung y''+y=0 hat Sinus- und Cosinuslösungen.", tex: `y_h=C_1\\cos(x)+C_2\\sin(x)` },
+      { title: "Resonanter Ansatz", text: "Da cos(x) bereits zur homogenen Struktur gehört, wird der Ansatz mit x multipliziert.", tex: `y_p=\\frac{x}{2}\\sin(x)` }
+    ]
+  };
+}
+
+interface LinearCoefficients {
+  ypp: number;
+  yp: number;
+  y: number;
+  constant: number;
+}
+
+function equationCoefficients(normalized: string): LinearCoefficients | null {
+  const parts = normalized.split("=");
+  if (parts.length !== 2) return null;
+  try {
+    const left = prepareOdeExpression(parts[0]);
+    const right = prepareOdeExpression(parts[1]);
+    const node = math.parse(`(${left})-(${right})`);
+    return cleanCoefficients(extractLinearCoefficients(node));
+  } catch {
+    return null;
+  }
+}
+
+function prepareOdeExpression(expression: string) {
+  return expression
+    .replace(/y''/g, "ypp")
+    .replace(/y'/g, "yp")
+    .replace(/(\d|\))(?=(ypp|yp|y)\b)/g, "$1*")
+    .replace(/(ypp|yp|y)(?=\()/g, "$1*");
+}
+
+function extractLinearCoefficients(node: MathNode): LinearCoefficients | null {
+  const raw = node as unknown as {
+    type?: string;
+    op?: string;
+    args?: MathNode[];
+    content?: MathNode;
+    name?: string;
+    value?: string | number;
+  };
+
+  if (raw.type === "ParenthesisNode" && raw.content) return extractLinearCoefficients(raw.content);
+  if (raw.type === "ConstantNode") return coefficients(0, 0, 0, Number(raw.value));
+  if (raw.type === "SymbolNode") {
+    if (raw.name === "ypp") return coefficients(1, 0, 0, 0);
+    if (raw.name === "yp") return coefficients(0, 1, 0, 0);
+    if (raw.name === "y") return coefficients(0, 0, 1, 0);
+    return null;
+  }
+
+  if (raw.type === "OperatorNode" && raw.args) {
+    if (raw.op === "-" && raw.args.length === 1) return scaleCoefficients(extractLinearCoefficients(raw.args[0]), -1);
+
+    if ((raw.op === "+" || raw.op === "-") && raw.args.length === 2) {
+      const left = extractLinearCoefficients(raw.args[0]);
+      const right = extractLinearCoefficients(raw.args[1]);
+      return addCoefficients(left, raw.op === "-" ? scaleCoefficients(right, -1) : right);
+    }
+
+    if (raw.op === "*" && raw.args.length === 2) {
+      const leftConstant = extractConstant(raw.args[0]);
+      if (leftConstant !== null) return scaleCoefficients(extractLinearCoefficients(raw.args[1]), leftConstant);
+      const rightConstant = extractConstant(raw.args[1]);
+      if (rightConstant !== null) return scaleCoefficients(extractLinearCoefficients(raw.args[0]), rightConstant);
+      return null;
+    }
+
+    if (raw.op === "/" && raw.args.length === 2) {
+      const denominator = extractConstant(raw.args[1]);
+      if (denominator === null || nearZero(denominator)) return null;
+      return scaleCoefficients(extractLinearCoefficients(raw.args[0]), 1 / denominator);
+    }
+  }
+
+  return null;
+}
+
+function extractConstant(node: MathNode): number | null {
+  const linear = extractLinearCoefficients(node);
+  if (!linear) return null;
+  if (!nearZero(linear.ypp) || !nearZero(linear.yp) || !nearZero(linear.y)) return null;
+  return linear.constant;
+}
+
+function coefficients(ypp: number, yp: number, y: number, constant: number): LinearCoefficients {
+  return { ypp, yp, y, constant };
+}
+
+function addCoefficients(a: LinearCoefficients | null, b: LinearCoefficients | null): LinearCoefficients | null {
+  if (!a || !b) return null;
+  return coefficients(a.ypp + b.ypp, a.yp + b.yp, a.y + b.y, a.constant + b.constant);
+}
+
+function scaleCoefficients(value: LinearCoefficients | null, factor: number): LinearCoefficients | null {
+  if (!value) return null;
+  return coefficients(value.ypp * factor, value.yp * factor, value.y * factor, value.constant * factor);
+}
+
+function cleanCoefficients(value: LinearCoefficients | null): LinearCoefficients | null {
+  if (!value) return null;
+  return coefficients(clean(value.ypp), clean(value.yp), clean(value.y), clean(value.constant));
+}
+
 function range(min: number, max: number, points: number) {
   return Array.from({ length: points }, (_, index) => min + ((max - min) * index) / (points - 1));
 }
 
-function parseCoefficient(value: string) {
-  if (value === "" || value === "+") return 1;
-  if (value === "-") return -1;
-  return Number(value);
+function nearZero(value: number) {
+  return Math.abs(value) < epsilon;
+}
+
+function clean(value: number) {
+  return nearZero(value) ? 0 : Number(value.toFixed(10));
 }
 
 function format(value: number) {

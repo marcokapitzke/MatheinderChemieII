@@ -115,12 +115,12 @@ export function Steps({ steps }: { steps: string[] }) {
   );
 }
 
-export function DetailedSteps({ steps }: { steps: Array<{ title: string; text: string; tex?: string }> }) {
+export function DetailedSteps({ steps, summary = "Ausführlichen Lösungsweg anzeigen" }: { steps: Array<{ title: string; text: string; tex?: string }>; summary?: string }) {
   if (!steps.length) return null;
 
   return (
     <details className="solution-details">
-      <summary>Ausführlichen Lösungsweg anzeigen</summary>
+      <summary>{summary}</summary>
       <div className="solution-detail-list">
         {steps.map((step) => (
           <article key={`${step.title}-${step.text}`}>

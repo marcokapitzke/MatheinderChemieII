@@ -51,4 +51,4 @@ https://marcokapitzke.github.io/MatheinderChemieII/
 
 ## Mathematische Grenzen
 
-Die Plattform ist kein universelles CAS. Unterstützt werden bewusst Standardfälle des zweiten Bandes. Nicht erkannte oder mathematisch unsichere Fälle werden abgelehnt statt geraten. Details stehen in [KNOWN_LIMITS.md](KNOWN_LIMITS.md) und [FEATURE_SCOPE.md](FEATURE_SCOPE.md).
+Die Plattform ist kein universelles CAS. Unterstützt werden bewusst Standardfälle des zweiten Bandes. Nicht erkannte oder mathematisch unsichere Fälle werden abgelehnt statt geraten. Details stehen in [KNOWN_LIMITS.md](KNOWN_LIMITS.md), [FEATURE_SCOPE.md](FEATURE_SCOPE.md) und [FEATURE_COVERAGE_REVIEW.md](FEATURE_COVERAGE_REVIEW.md).

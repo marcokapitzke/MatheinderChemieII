@@ -23,11 +23,11 @@ export function OdeModule({ onNavigate }: Props) {
       description="Löst ausgewählte Standard-DGLs mit nachvollziehbarem Ansatz und Lösungskurve."
       onNavigate={onNavigate}
       supported={[
-        "y' = k y",
-        "y' + a y = b",
+        "lineare DGL erster Ordnung mit konstanten Koeffizienten, auch umgestellt",
+        "y' = k y, y' = c und y' + a y = b",
         "logistisches Wachstum y' = r y (1-y/K)",
         "lineare homogene DGL zweiter Ordnung mit konstanten Koeffizienten",
-        "einzelne inhomogene Standardfälle wie y'' + y = sin(x)"
+        "konstant erzwungene DGLs zweiter Ordnung und einzelne Resonanzfälle"
       ]}
       aside={
         <details className="examples" open>
