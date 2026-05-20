@@ -1,4 +1,4 @@
-import { ArrowRight, Atom, BookMarked, BrainCircuit, Cpu, ShieldCheck } from "lucide-react";
+import { ArrowRight, Atom, BookMarked, BrainCircuit, Cpu, MousePointerClick, ShieldCheck, Sparkles, Workflow } from "lucide-react";
 import { modules, type RouteId } from "../data/modules";
 import { FourierHeroScene } from "./FourierHeroScene";
 import { MathFormula } from "./MathFormula";
@@ -57,6 +57,41 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
+      <section className="section-shell value-section" aria-labelledby="value-title">
+        <div className="section-heading section-heading--split">
+          <div>
+            <p className="eyebrow">Mehrwert</p>
+            <h2 id="value-title">Buchkapitel, Rechnung und Visualisierung in einem Schritt.</h2>
+          </div>
+          <p>
+            Die Module führen direkt vom Beispiel zur Rechnung und zum Plot, ohne zwischen Suchfeld, CAS-Ausgabe und separatem
+            Grafikfenster zu springen.
+          </p>
+        </div>
+        <div className="value-grid">
+          <article className="value-card">
+            <BookMarked size={22} />
+            <strong>Buchnaher Einstieg</strong>
+            <span>Kapitelbezug, Beispiele und Schreibweise bleiben nah am zweiten Band.</span>
+          </article>
+          <article className="value-card">
+            <Workflow size={22} />
+            <strong>Formel und Methode</strong>
+            <span>Ergebnis, Rechenweg und Visualisierung werden als zusammenhängender Arbeitsgang gezeigt.</span>
+          </article>
+          <article className="value-card">
+            <MousePointerClick size={22} />
+            <strong>Sofort bedienbar</strong>
+            <span>Beispiel wählen, Parameter anpassen, Darstellung lesen: ohne überladene Werkzeugleisten.</span>
+          </article>
+          <article className="value-card">
+            <Sparkles size={22} />
+            <strong>Hochwertige Oberfläche</strong>
+            <span>Akademische Typografie, KaTeX, Plotly und Three.js laufen direkt im Browser.</span>
+          </article>
+        </div>
+      </section>
+
       <section className="section-shell module-section" aria-labelledby="module-title">
         <div className="section-heading">
           <p className="eyebrow">Module</p>
@@ -72,6 +107,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <div className="module-mini-formula">
                 <MathFormula tex={module.formula} />
               </div>
+              <span className="module-card-action">Modul öffnen</span>
               <small>{module.chapter}</small>
             </button>
           ))}

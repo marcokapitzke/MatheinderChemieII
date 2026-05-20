@@ -224,6 +224,7 @@ a {
 .hero-copy,
 .purpose-band p,
 .module-card p,
+.value-card span,
 .quality-grid span {
   text-wrap: pretty;
 }
@@ -618,7 +619,7 @@ a {
 }
 
 .module-section {
-  padding: 4.8rem 0 2.2rem;
+  padding: 3.9rem 0 2.2rem;
 }
 
 .module-page .calculator-grid {
@@ -751,6 +752,97 @@ a {
 .section-heading {
   max-width: 780px;
   margin-bottom: 2.1rem;
+}
+
+.section-heading--split {
+  max-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 0.62fr) minmax(260px, 0.38fr);
+  gap: 2rem;
+  align-items: end;
+}
+
+.section-heading--split > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.03rem;
+  line-height: 1.62;
+}
+
+.value-section {
+  padding: 4.5rem 0 0;
+}
+
+.value-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  border-top: 1px solid var(--line-strong);
+  border-left: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.value-card {
+  position: relative;
+  min-height: 205px;
+  display: grid;
+  align-content: start;
+  gap: 0.85rem;
+  border-right: 1px solid var(--line-strong);
+  border-bottom: 1px solid var(--line-strong);
+  background:
+    linear-gradient(145deg, rgba(255, 255, 255, 0.86), rgba(248, 251, 255, 0.66)),
+    rgba(255, 255, 255, 0.55);
+  padding: 1.25rem;
+  overflow: hidden;
+  transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+}
+
+.value-card::before {
+  content: "";
+  width: 42px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blue), var(--bordeaux));
+}
+
+.value-card::after {
+  content: "";
+  position: absolute;
+  inset: auto 1.05rem 1rem auto;
+  width: 4.2rem;
+  aspect-ratio: 1;
+  border: 1px solid rgba(139, 30, 63, 0.13);
+  border-radius: 50%;
+  opacity: 0;
+  transform: scale(0.82);
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.value-card:hover {
+  transform: translateY(-6px);
+  background:
+    radial-gradient(circle at 88% 12%, rgba(139, 30, 63, 0.1), transparent 8rem),
+    linear-gradient(145deg, #ffffff, #f6f9fd);
+  box-shadow: 0 22px 62px rgba(9, 33, 63, 0.13);
+}
+
+.value-card:hover::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.value-card svg {
+  color: var(--bordeaux);
+}
+
+.value-card strong {
+  color: var(--blue);
+  font-family: var(--serif);
+  font-size: 1.28rem;
+  line-height: 1.12;
+}
+
+.value-card span {
+  color: var(--muted);
 }
 
 .module-grid {
@@ -890,8 +982,36 @@ a {
 }
 
 .module-card small {
-  margin-top: auto;
+  margin-top: 0.72rem;
   color: var(--quiet);
+}
+
+.module-card-action {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 30px;
+  border: 1px solid rgba(139, 30, 63, 0.2);
+  border-radius: 999px;
+  background: rgba(244, 230, 235, 0.72);
+  color: var(--bordeaux);
+  padding: 0.26rem 0.62rem;
+  font-size: 0.78rem;
+  font-weight: 850;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease;
+}
+
+.module-card-action::after {
+  content: "→";
+  font-size: 0.94rem;
+  line-height: 1;
+}
+
+.module-card:hover .module-card-action {
+  transform: translateX(0.14rem);
+  border-color: rgba(139, 30, 63, 0.36);
+  background: rgba(244, 230, 235, 0.96);
 }
 
 .module-mini-formula {
@@ -1628,6 +1748,10 @@ input[type="range"] {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .value-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .hero-grid,
   .calculator-grid {
     grid-template-columns: 1fr;
@@ -1663,11 +1787,13 @@ input[type="range"] {
 
   .hero-actions,
   .purpose-band,
+  .section-heading--split,
   .analysis-grid,
   .dual-plot-grid,
   .insight-grid,
   .interval-grid,
   .range-grid,
+  .value-grid,
   .quality-grid {
     grid-template-columns: 1fr;
   }
@@ -1708,6 +1834,10 @@ input[type="range"] {
 
   .purpose-band {
     display: grid;
+  }
+
+  .value-section {
+    padding-top: 3.2rem;
   }
 
   .module-grid {

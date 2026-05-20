@@ -46,7 +46,7 @@ export const modules: ModuleCard[] = [
     id: "fourier",
     title: "Fourier-Transformation & Spektren",
     eyebrow: "Spektralanalyse",
-    description: "Didaktische Fourier-Paare, Interferogramme und Spektren für Chemie und Physik.",
+    description: "Fourier-Paare, Interferogramme und Spektren für Chemie und Physik.",
     chapter: "Band II: Fourier-Transformation",
     formula: "F(k)=\\int f(x)\\,\\operatorname{exp}(-\\mathrm{i}kx)\\,\\mathrm{d}x"
   }
