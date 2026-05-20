@@ -89,8 +89,8 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <div className="quality-grid">
             <article>
               <ShieldCheck size={22} />
-              <strong>Mathematische Standardfälle</strong>
-              <span>Vektoren, Matrizen, Differentialgleichungen, mehrdimensionale Analysis und Fourier-Visualisierungen werden durch eigene Kernfunktionen geprüft.</span>
+              <strong>5.995 generierte Prüffälle</strong>
+              <span>Gram-Schmidt, Matrixrechner und DGL-Rechner werden gegen unabhängige mathematische Invarianten geprüft.</span>
             </article>
             <article>
               <BrainCircuit size={22} />
