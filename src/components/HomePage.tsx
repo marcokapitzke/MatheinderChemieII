@@ -83,7 +83,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <summary>
             <span>
               <span className="eyebrow">Engineering-Qualität</span>
-              <strong>Browserbasiert, getestet und bewusst begrenzt.</strong>
+              <strong>Gebaut wie ein wissenschaftliches Werkzeug.</strong>
             </span>
           </summary>
           <div className="quality-grid">
