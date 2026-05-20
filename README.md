@@ -39,7 +39,9 @@ VITE_BASE_PATH=/MatheinderChemieII/ npm run build
 
 ## Deployment
 
-Der Workflow `.github/workflows/deploy.yml` baut bei Push auf `main`, führt die Tests aus und veröffentlicht `dist/` über GitHub Pages. In den Repository-Einstellungen muss GitHub Pages auf GitHub Actions als Source gestellt sein.
+Die veröffentlichte Version wird aktuell über den Branch `gh-pages` ausgeliefert. GitHub Pages ist auf `gh-pages` mit Pfad `/` konfiguriert.
+
+Ein GitHub-Actions-Workflow ist vorbereitet, konnte aber mit dem vorhandenen Token nicht direkt ins Repository gepusht werden, weil GitHub dafür den Token-Scope `workflow` verlangt. Die lokal vorbereitete Datei liegt unter `.github/workflows/deploy.yml`; eine kopierbare Fassung steht in [GITHUB_ACTIONS_WORKFLOW.md](GITHUB_ACTIONS_WORKFLOW.md).
 
 Ziel-URL:
 
