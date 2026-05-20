@@ -16,7 +16,7 @@ export const modules: ModuleCard[] = [
     eyebrow: "Vektorräume",
     description: "Vektoroperationen, Projektionen, Winkel und Orthonormalisierung mit Schrittfolge.",
     chapter: "Band II: Vektoren und Skalarprodukte",
-    formula: "\\operatorname{proj}_{u}(v)=\\frac{v\\cdot u}{u\\cdot u}u"
+    formula: "\\operatorname{proj}_{\\vec{u}}(\\vec{v})=\\frac{\\vec{v}\\cdot\\vec{u}}{\\vec{u}\\cdot\\vec{u}}\\vec{u}"
   },
   {
     id: "matrices",
@@ -24,7 +24,7 @@ export const modules: ModuleCard[] = [
     eyebrow: "Lineare Algebra",
     description: "Matrixrechnung, Determinanten, Rang, inverse Matrizen und Gauß-Elimination.",
     chapter: "Band II: Matrizen und lineare Systeme",
-    formula: "\\mathbf{A}\\,\\mathbf{x}=\\mathbf{b}"
+    formula: "\\mathbf{A}\\,\\vec{x}=\\vec{b}"
   },
   {
     id: "multivar",

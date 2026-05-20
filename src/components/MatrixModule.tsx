@@ -18,8 +18,8 @@ import { PlotPanel, type Trace } from "./PlotPanel";
 
 const matrixATex = "\\mathbf{A}";
 const matrixBTex = "\\mathbf{B}";
-const vectorXTex = "\\mathbf{x}";
-const vectorBTex = "\\mathbf{b}";
+const vectorXTex = "\\vec{x}";
+const vectorBTex = "\\vec{b}";
 
 interface Props {
   onNavigate: (route: RouteId) => void;
@@ -108,6 +108,7 @@ export function MatrixModule({ onNavigate }: Props) {
             </article>
             <article className="result-card">
               <p className="eyebrow">Lösung des linearen Systems</p>
+              <MathFormula block tex={`${matrixATex}\\,${vectorXTex}=${vectorBTex}`} />
               <MathFormula block tex={`${vectorBTex}=${vectorToColumnTex(result.vector)}`} />
               {result.solutionStatus === "unique" && result.solution ? <MathFormula block tex={`${vectorXTex}=${vectorToColumnTex(result.solution)}`} /> : null}
               {result.solutionStatus === "none" ? <p>Das System ist inkonsistent und besitzt keine Lösung.</p> : null}

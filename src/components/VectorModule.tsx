@@ -11,6 +11,8 @@ interface Props {
   onNavigate: (route: RouteId) => void;
 }
 
+const vectorTex = (name: string, index?: number) => `\\vec{${name}}${index === undefined ? "" : `_{${index}}`}`;
+
 export function VectorModule({ onNavigate }: Props) {
   const [input, setInput] = useState("v1=(1,1,0), v2=(1,0,1), v3=(0,1,1)");
   const [scalar, setScalar] = useState(2);
@@ -69,19 +71,19 @@ export function VectorModule({ onNavigate }: Props) {
           <section className="analysis-grid">
             <article className="result-card">
               <p className="eyebrow">Operationen</p>
-              {result.sum ? <MathFormula block tex={`v_1+v_2=${formatVector(result.sum)}`} /> : null}
-              {result.difference ? <MathFormula block tex={`v_1-v_2=${formatVector(result.difference)}`} /> : null}
-              <MathFormula block tex={`${formatNumber(scalar)}v_1=${formatVector(scale(result.vectors[0], scalar))}`} />
-              {result.dot !== null ? <MathFormula block tex={`v_1\\cdot v_2=${formatNumber(result.dot)}`} /> : null}
-              {result.cross ? <MathFormula block tex={`v_1\\times v_2=${formatVector(result.cross)}`} /> : null}
+              {result.sum ? <MathFormula block tex={`${vectorTex("v", 1)}+${vectorTex("v", 2)}=${formatVector(result.sum)}`} /> : null}
+              {result.difference ? <MathFormula block tex={`${vectorTex("v", 1)}-${vectorTex("v", 2)}=${formatVector(result.difference)}`} /> : null}
+              <MathFormula block tex={`${formatNumber(scalar)}${vectorTex("v", 1)}=${formatVector(scale(result.vectors[0], scalar))}`} />
+              {result.dot !== null ? <MathFormula block tex={`${vectorTex("v", 1)}\\cdot ${vectorTex("v", 2)}=${formatNumber(result.dot)}`} /> : null}
+              {result.cross ? <MathFormula block tex={`${vectorTex("v", 1)}\\times ${vectorTex("v", 2)}=${formatVector(result.cross)}`} /> : null}
             </article>
             <article className="result-card">
               <p className="eyebrow">Geometrie</p>
               {result.norms.map((norm, index) => (
-                <MathFormula key={index} block tex={`\\left\\|v_${index + 1}\\right\\|=${formatNumber(norm)}`} />
+                <MathFormula key={index} block tex={`\\left\\|${vectorTex("v", index + 1)}\\right\\|=${formatNumber(norm)}`} />
               ))}
-              {result.angle !== null ? <MathFormula block tex={`\\angle(v_1,v_2)\\approx ${formatNumber((result.angle * 180) / Math.PI)}^\\circ`} /> : null}
-              {result.projection ? <MathFormula block tex={`\\operatorname{proj}_{v_2}(v_1)=${formatVector(result.projection)}`} /> : null}
+              {result.angle !== null ? <MathFormula block tex={`\\angle(${vectorTex("v", 1)},${vectorTex("v", 2)})\\approx ${formatNumber((result.angle * 180) / Math.PI)}^\\circ`} /> : null}
+              {result.projection ? <MathFormula block tex={`\\operatorname{proj}_{${vectorTex("v", 2)}}(${vectorTex("v", 1)})=${formatVector(result.projection)}`} /> : null}
             </article>
             <article className="result-card">
               <p className="eyebrow">Lineare Unabhängigkeit</p>
@@ -99,7 +101,7 @@ export function VectorModule({ onNavigate }: Props) {
             <p className="eyebrow">Gram-Schmidt</p>
             <div className="formula-list">
               {result.basis.map((vector, index) => (
-                <MathFormula key={index} block tex={`e_${index + 1}=${formatVector(vector)}`} />
+                <MathFormula key={index} block tex={`${vectorTex("e", index + 1)}=${formatVector(vector)}`} />
               ))}
             </div>
             <DetailedSteps
@@ -108,7 +110,7 @@ export function VectorModule({ onNavigate }: Props) {
                 text: step.skipped
                   ? "Der orthogonale Rest ist numerisch null; der Vektor ist linear abhängig und wird übersprungen."
                   : "Projektionen auf die bereits gebildeten orthogonalen Vektoren werden abgezogen und danach normiert.",
-                tex: `u_${step.index}=${formatVector(step.orthogonal)}${step.normalized ? `,\\quad e_${step.index}=${formatVector(step.normalized)}` : ""}`
+                tex: `${vectorTex("u", step.index)}=${formatVector(step.orthogonal)}${step.normalized ? `,\\quad ${vectorTex("e", step.index)}=${formatVector(step.normalized)}` : ""}`
               }))}
             />
           </section>
