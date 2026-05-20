@@ -1770,10 +1770,18 @@ input[type="range"] {
   .home-hero {
     min-height: auto;
     padding: 3.5rem 0 3rem;
+    overflow: hidden;
   }
 
   .hero-grid {
     gap: 2.2rem;
+    min-width: 0;
+  }
+
+  .hero-text,
+  .fourier-hero-scene {
+    min-width: 0;
+    max-width: 100%;
   }
 
   .hero-text h1,
@@ -1818,11 +1826,12 @@ input[type="range"] {
 
   .fourier-hero-scene {
     min-height: 460px;
+    overflow: hidden;
   }
 
   .fourier-hero-svg {
-    inset: 3% -16% 7% -12%;
-    width: 132%;
+    inset: 3% -10% 7%;
+    width: 120%;
     height: 90%;
   }
 
@@ -1834,6 +1843,43 @@ input[type="range"] {
 
   .purpose-band {
     display: grid;
+  }
+
+  input[type="range"] {
+    min-height: 44px;
+  }
+
+  .solution-details summary,
+  .examples summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .math-formula--block {
+    max-width: 100%;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .plot-panel .modebar {
+    max-width: calc(100% - 16px);
+    transform: scale(1.06);
+    transform-origin: top right;
+  }
+
+  .plot-panel .modebar-btn {
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+  }
+
+  .plot-panel .modebar-btn svg {
+    width: 18px !important;
+    height: 18px !important;
   }
 
   .value-section {
@@ -1863,6 +1909,12 @@ input[type="range"] {
     align-items: flex-start;
     justify-content: center;
   }
+
+  .footer-inner a {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 @media (max-width: 460px) {
@@ -1884,8 +1936,9 @@ input[type="range"] {
   }
 
   .fourier-hero-svg {
-    inset: 2% -34% 9% -26%;
-    width: 160%;
+    inset: 4% -12% 10%;
+    width: 124%;
+    height: 86%;
   }
 
   .fourier-scene-state {
