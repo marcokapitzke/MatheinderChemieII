@@ -18,14 +18,20 @@ Mathe in der (Bio-)Chemie II ist eine stabile Version für Standardfälle. Die W
 - Basiswechsel und Spatprodukt sind noch nicht als eigene Workflows enthalten.
 - 3D-Vektoren werden als Linien im Raum visualisiert; Pfeilspitzen sind bewusst reduziert.
 
-## Matrizen und LGS
+## Matrizen
 
 - Matrizen bis 4x4 werden unterstützt.
 - Matrixaddition, Matrixsubtraktion und Matrixprodukt werden nur bei passenden Dimensionen angezeigt.
 - Skalarmultiplikation wird numerisch dargestellt.
-- Gauß-Jordan-Elimination arbeitet numerisch, nicht als exakter Bruchrechner.
-- Eindeutige, keine und unendlich viele Lösungen werden über Rangbedingungen klassifiziert.
 - Eigenwerte und Eigenvektoren sind bewusst nicht aktiviert.
+
+## Lineare Gleichungssysteme
+
+- Der LGS-Rechner unterstützt erweiterte Matrizen `(A|b)` bis 6 Gleichungen und 6 Variablen.
+- REF und RREF werden mit deutscher Zeilenschreibweise `Z_i` angezeigt.
+- Rationale Eingaben wie `1/3` werden exakt als Brüche gerechnet; Dezimaleingaben werden rationalisiert.
+- Eindeutige, keine und unendlich viele Lösungen werden über Rangbedingungen klassifiziert.
+- Allgemeine symbolische Parameterbedingungen in Koeffizienten sind nicht Teil des Rechners.
 
 ## Mehrdimensionale Analysis
 

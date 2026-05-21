@@ -16,6 +16,17 @@ export interface MatrixAnalysis {
   rowSteps: string[];
 }
 
+export interface MatrixOnlyAnalysis {
+  ok: true;
+  matrix: Matrix;
+  determinant: number | null;
+  rank: number;
+  trace: number | null;
+  inverse: Matrix | null;
+  transpose: Matrix;
+  rref: Matrix;
+}
+
 export interface MatrixFailure {
   ok: false;
   message: string;
@@ -48,16 +59,15 @@ export function parseVector(input: string): number[] | null {
 }
 
 export function analyzeMatrix(matrixInput: string, vectorInput: string): MatrixAnalysis | MatrixFailure {
-  const matrix = parseMatrix(matrixInput);
+  const base = analyzeMatrixOnly(matrixInput);
   const vector = parseVector(vectorInput);
-  if (!matrix) return { ok: false, message: "Bitte gib eine Matrix zeilenweise ein, z. B. 2,1; 1,3." };
+  if (!base.ok) return base;
+  const matrix = base.matrix;
   if (!vector) return { ok: false, message: "Bitte gib die rechte Seite b als Spalte ein, z. B. 1; 2." };
   if (matrix.length !== vector.length) return { ok: false, message: "Die Zeilenzahl von A muss zur Länge von b passen." };
-  if (matrix.length > 4 || matrix[0].length > 4) return { ok: false, message: "Diese Version unterstützt Matrizen bis 4x4." };
 
   const augmented = matrix.map((row, index) => [...row, vector[index]]);
   const elimination = rrefWithSteps(augmented);
-  const coefficientRref = rrefWithSteps(matrix).matrix;
   const rankA = rank(matrix);
   const rankAugmented = rank(elimination.matrix);
   const unknowns = matrix[0].length;
@@ -68,15 +78,32 @@ export function analyzeMatrix(matrixInput: string, vectorInput: string): MatrixA
     ok: true,
     matrix,
     vector,
-    determinant: matrix.length === matrix[0].length ? determinant(matrix) : null,
-    rank: rankA,
-    trace: matrix.length === matrix[0].length ? matrix.reduce((sum, row, index) => sum + row[index], 0) : null,
-    inverse: matrix.length === matrix[0].length ? inverse(matrix) : null,
-    transpose: transpose(matrix),
-    rref: coefficientRref,
+    determinant: base.determinant,
+    rank: base.rank,
+    trace: base.trace,
+    inverse: base.inverse,
+    transpose: base.transpose,
+    rref: base.rref,
     solutionStatus,
     solution,
     rowSteps: elimination.steps
+  };
+}
+
+export function analyzeMatrixOnly(matrixInput: string): MatrixOnlyAnalysis | MatrixFailure {
+  const matrix = parseMatrix(matrixInput);
+  if (!matrix) return { ok: false, message: "Bitte gib eine Matrix zeilenweise ein, z. B. 2,1; 1,3." };
+  if (matrix.length > 4 || matrix[0].length > 4) return { ok: false, message: "Der Matrixrechner unterstützt Matrizen bis 4x4. Größere LGS bis 6x6 findest du im LGS-Modul." };
+
+  return {
+    ok: true,
+    matrix,
+    determinant: matrix.length === matrix[0].length ? determinant(matrix) : null,
+    rank: rank(matrix),
+    trace: matrix.length === matrix[0].length ? matrix.reduce((sum, row, index) => sum + row[index], 0) : null,
+    inverse: matrix.length === matrix[0].length ? inverse(matrix) : null,
+    transpose: transpose(matrix),
+    rref: rrefWithSteps(matrix).matrix
   };
 }
 
@@ -165,13 +192,13 @@ export function rrefWithSteps(input: Matrix): { matrix: Matrix; steps: string[] 
 
     if (pivot !== row) {
       [matrix[pivot], matrix[row]] = [matrix[row], matrix[pivot]];
-      steps.push(`R_${row + 1} \\leftrightarrow R_${pivot + 1}`);
+      steps.push(`Z_${row + 1} \\leftrightarrow Z_${pivot + 1}`);
     }
 
     const pivotValue = matrix[row][lead];
     if (Math.abs(pivotValue - 1) > epsilon) {
       for (let column = 0; column < matrix[row].length; column += 1) matrix[row][column] /= pivotValue;
-      steps.push(`R_${row + 1} \\leftarrow ${formatNumber(1 / pivotValue)}\\,R_${row + 1}`);
+      steps.push(`Z_${row + 1} \\leftarrow ${formatNumber(1 / pivotValue)}\\,Z_${row + 1}`);
     }
 
     for (let other = 0; other < matrix.length; other += 1) {
@@ -179,7 +206,7 @@ export function rrefWithSteps(input: Matrix): { matrix: Matrix; steps: string[] 
       const factor = matrix[other][lead];
       if (Math.abs(factor) > epsilon) {
         for (let column = 0; column < matrix[other].length; column += 1) matrix[other][column] -= factor * matrix[row][column];
-        steps.push(`R_${other + 1} \\leftarrow R_${other + 1} - ${formatNumber(factor)}\\,R_${row + 1}`);
+        steps.push(`Z_${other + 1} \\leftarrow Z_${other + 1} - ${formatNumber(factor)}\\,Z_${row + 1}`);
       }
     }
 

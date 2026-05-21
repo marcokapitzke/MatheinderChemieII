@@ -1,4 +1,4 @@
-export type RouteId = "home" | "vectors" | "matrices" | "multivar" | "odes" | "fourier";
+export type RouteId = "home" | "vectors" | "matrices" | "lgs" | "multivar" | "odes" | "fourier";
 
 export interface ModuleCard {
   id: Exclude<RouteId, "home">;
@@ -20,11 +20,19 @@ export const modules: ModuleCard[] = [
   },
   {
     id: "matrices",
-    title: "Matrizen & lineare Gleichungssysteme",
+    title: "Matrizen",
     eyebrow: "Lineare Algebra",
-    description: "Matrixrechnung, Determinanten, Rang, inverse Matrizen und Gauß-Elimination.",
-    chapter: "Band II: Matrizen und lineare Systeme",
-    formula: "\\mathbf{A}\\,\\vec{x}=\\vec{b}"
+    description: "Matrixrechnung, Determinanten, Rang, inverse Matrizen und lineare Abbildungen.",
+    chapter: "Band II: Matrizen und lineare Abbildungen",
+    formula: "\\mathbf{A}^{-1},\\quad \\det(\\mathbf{A}),\\quad \\operatorname{rang}(\\mathbf{A})"
+  },
+  {
+    id: "lgs",
+    title: "Lineare Gleichungssysteme",
+    eyebrow: "Gauß-Verfahren",
+    description: "Gauß- und Gauß-Jordan-Verfahren mit erweiterter Matrix, Bruchdarstellung und Zeilenumformungen.",
+    chapter: "Band II: Lineare Gleichungssysteme",
+    formula: "(\\mathbf{A}\\mid\\vec{b})\\sim\\operatorname{rref}(\\mathbf{A}\\mid\\vec{b})"
   },
   {
     id: "multivar",
@@ -69,6 +77,16 @@ export const matrixExamples = [
   { label: "Singulär", matrix: "1,2; 2,4", matrixB: "1,0; 0,1", vector: "3; 6", note: "keine inverse Matrix" },
   { label: "Diagonal", matrix: "3,0,0; 0,2,0; 0,0,-1", matrixB: "2,0,0; 0,1,0; 0,0,4", vector: "3; 4; -2", note: "Rang, Spur und Determinante klar" },
   { label: "Rotation", matrix: "0,-1; 1,0", matrixB: "0,1; -1,0", vector: "1; 1", note: "orthogonale 2D-Abbildung" }
+];
+
+export const lgsExamples = [
+  { label: "Eindeutig 2x2", value: "2, 1 | 1\n1, 3 | 2", note: "zwei Geraden mit Schnittpunkt" },
+  { label: "Klassisches 3x3", value: "2, 1, -1 | 8\n-3, -1, 2 | -11\n-2, 1, 2 | -3", note: "Gauß-Verfahren mit eindeutiger Lösung" },
+  { label: "Bruchrechnung", value: "1/2, 1 | 3\n1, -1/3 | 1", note: "exakte Brüche statt Dezimalchaos" },
+  { label: "Unendlich viele", value: "1, 2 | 3\n2, 4 | 6", note: "abhängige Gleichungen mit freiem Parameter" },
+  { label: "Keine Lösung", value: "1, 2 | 3\n2, 4 | 7", note: "widersprüchliche Zeile" },
+  { label: "Unterbestimmt 3 Variablen", value: "1, 2, -1 | 3\n2, 4, -2 | 6", note: "Parameterdarstellung" },
+  { label: "4x4 Standardfall", value: "1, 1, 0, 0 | 2\n0, 1, 1, 0 | 3\n0, 0, 1, 1 | 4\n1, 0, 0, 1 | 5", note: "größeres LGS bis 6x6" }
 ];
 
 export const multivarExamples = [

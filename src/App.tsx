@@ -3,12 +3,13 @@ import { Header } from "./components/Layout";
 import { HomePage } from "./components/HomePage";
 import { VectorModule } from "./components/VectorModule";
 import { MatrixModule } from "./components/MatrixModule";
+import { LgsModule } from "./components/LgsModule";
 import { MultivariableModule } from "./components/MultivariableModule";
 import { OdeModule } from "./components/OdeModule";
 import { FourierModule } from "./components/FourierModule";
 import type { RouteId } from "./data/modules";
 
-const routeIds: RouteId[] = ["home", "vectors", "matrices", "multivar", "odes", "fourier"];
+const routeIds: RouteId[] = ["home", "vectors", "matrices", "lgs", "multivar", "odes", "fourier"];
 
 function routeFromHash(): RouteId {
   const hash = window.location.hash.replace("#", "") as RouteId;
@@ -44,6 +45,7 @@ export default function App() {
       {route === "home" ? <HomePage onNavigate={navigate} /> : null}
       {route === "vectors" ? <VectorModule onNavigate={navigate} /> : null}
       {route === "matrices" ? <MatrixModule onNavigate={navigate} /> : null}
+      {route === "lgs" ? <LgsModule onNavigate={navigate} /> : null}
       {route === "multivar" ? <MultivariableModule onNavigate={navigate} /> : null}
       {route === "odes" ? <OdeModule onNavigate={navigate} /> : null}
       {route === "fourier" ? <FourierModule onNavigate={navigate} /> : null}

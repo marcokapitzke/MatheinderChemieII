@@ -21,4 +21,4 @@ Mathe in der (Bio-)Chemie II orientiert sich bewusst an Mathe in der (Bio-)Chemi
 
 ## Ziel
 
-Die neue Seite soll sofort als Schwesterprojekt zu MathChem I erkennbar sein, aber fachlich eigenständig wirken und für den zweiten Band einen klaren, hochwertigeren Einstieg bilden.
+Die neue Seite soll sofort als Schwesterprojekt zu Band I erkennbar sein, aber fachlich eigenständig wirken und für den zweiten Band einen klaren, hochwertigeren Einstieg bilden.

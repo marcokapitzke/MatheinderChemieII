@@ -2,10 +2,11 @@
 
 ## Priorität 1
 
-- Landing Page im visuellen System von MathChem I
+- Landing Page im visuellen System von Band I
 - Interaktives 3D-Wasserstoffatom mit WebGL-Fallback
 - Vektorrechner mit Skalarmultiplikation, Norm, Skalarprodukt, Kreuzprodukt, Winkel, Projektion und Gram-Schmidt
-- Matrix- und LGS-Rechner mit Matrixoperationen, Gauß-Elimination, Rang, Determinante, Inverser und 2D-Visualisierung
+- Matrixrechner mit Matrixoperationen, Rang, Determinante und Inverser
+- eigener LGS-Rechner mit Gauß-/Gauß-Jordan-Verfahren, REF/RREF, Bruchdarstellung, Zeilenumformungen und 2D-Visualisierung
 - Fourier-Visualizer für Standardfunktionen, Dreiecksignal, Exponentialabfall, Lorentz-Linie, Cosinus und Interferogramm-zu-Spektrum
 - Tests, Build und GitHub-Pages-Workflow
 
@@ -25,7 +26,8 @@
 ## Unterstützt Pro Modul
 
 - Vektoren: 2D/3D-Eingabe, Addition/Subtraktion, Skalarmultiplikation, Projektionen, Gram-Schmidt, Abhängigkeitsfall.
-- Matrizen: bis 4x4, Operationen mit zweiter Matrix, Matrixkennzahlen, LGS-Klassifikation, RREF und 2x2-Geradenplot.
+- Matrizen: bis 4x4, Operationen mit zweiter Matrix, Matrixkennzahlen und reduzierte Zeilenstufenform der Matrix.
+- LGS: erweiterte Matrix `(A|b)` bis 6x6, REF/RREF, exakte Brucharithmetik für rationale Eingaben, eindeutige/keine/unendlich viele Lösungen, Parameterdarstellung und 2D-Geradenplot.
 - Mehrdimensionale Analysis: symbolische partielle Ableitungen, Gradient, feste Richtungsableitung am Ursprung, Hesse, numerische Fläche/Kontur, Rechteckintegral.
 - DGL: klare Standardformen mit Lösungsansatz und Plot, inklusive umgestellter linearer DGLs erster Ordnung, konstanter Ableitungen, harmonischer Oszillator-Kurzform und konstant erzwungener DGLs zweiter Ordnung.
 - Fourier: numerische Visualisierung bekannter Fourier-Paare, Dreiecksignale, beidseitigem Exponentialabfall, Lorentz-artigen Linien, Cosinus-Schwingungen und Spektralsimulation.

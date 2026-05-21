@@ -56,17 +56,18 @@ Skalarmultiplikation gehört zu den Grundoperationen eines Vektorraums und ist g
 
 - `Skalarmultiplikation`: `v1=(3,-1), v2=(1,2)` mit `lambda=-2`.
 
-## 2. Matrizen & lineare Gleichungssysteme
+## 2. Matrizen und lineare Gleichungssysteme
 
 ### 1. Aktuell unterstützte Fallgruppen
 
 - Matrizen bis 4x4.
 - Matrixaddition, Matrixsubtraktion, Matrixmultiplikation und Skalarmultiplikation mit zweiter Matrix `B`.
 - Determinante, Rang, Spur, Transposition und inverse Matrix.
-- LGS in der Form `A x = b`.
-- Klassifikation: eindeutige Lösung, keine Lösung, unendlich viele Lösungen.
-- Gauß-Jordan-Elimination mit Zeilenumformungen.
-- 2x2-Geradenvisualisierung.
+- Eigenständiges LGS-Modul mit erweiterter Matrix `(A|b)` bis 6x6.
+- REF und RREF mit deutscher Zeilenumformung `Z_i`.
+- Exakte Bruchrechnung für rationale Eingaben.
+- Klassifikation: eindeutige Lösung, keine Lösung, unendlich viele Lösungen inklusive Parameterdarstellung.
+- 2x2-Geradenvisualisierung im LGS-Modul.
 
 ### 2. Erwartbare Standardfallgruppen für das Grundstudium
 
@@ -79,35 +80,37 @@ Skalarmultiplikation gehört zu den Grundoperationen eines Vektorraums und ist g
 ### 3. Offensichtliche Lücken
 
 - Grundoperationen mit zweiter Matrix `B` waren in der Kernbibliothek vorhanden, aber nicht im UI nutzbar.
-- Exakte Bruchrechnung fehlt.
+- Der frühere Matrixrechner war für LGS didaktisch zu knapp; diese Lücke wurde durch das eigene LGS-Modul geschlossen.
 - Eigenwerte/Eigenvektoren fehlen bewusst.
 
 ### 4. Einschätzung
 
 - Matrixoperationen mit `B`: didaktische Relevanz hoch, Implementierungsrisiko niedrig, Scope-Explosion niedrig.
-- Exakte Bruchrechnung: didaktische Relevanz mittel, Implementierungsrisiko mittel, Scope-Explosion mittel.
+- Eigenständiges LGS-Modul: didaktische Relevanz hoch, Implementierungsrisiko mittel, Scope-Explosion niedrig bis mittel.
 - Eigenwerte/Eigenvektoren: didaktische Relevanz mittel bis hoch, Implementierungsrisiko hoch, Scope-Explosion hoch.
 
 ### 5. Entscheidung
 
 - Matrixoperationen mit `B`: jetzt implementieren.
-- Exakte Bruchrechnung: späteres Feature.
+- LGS-Modul mit exakter Bruchrechnung und REF/RREF: jetzt implementieren.
 - Eigenwerte/Eigenvektoren: dokumentieren, aber nicht implementieren.
 
 ### 6. Begründung
 
-Addition, Subtraktion, Skalarmultiplikation und Matrixprodukt sind geschlossene Standardoperationen. Sie erweitern den Rechner sinnvoll, ohne den Anspruch eines allgemeinen linearen Algebra Systems zu erzeugen.
+Addition, Subtraktion, Skalarmultiplikation und Matrixprodukt sind geschlossene Standardoperationen. Für lineare Gleichungssysteme ist ein eigener Rechner didaktisch sauberer: Die erweiterte Matrix, die deutschen Zeilenoperationen und die Lösungsklassifikation bleiben dadurch sichtbar, ohne den Matrixrechner zu überladen.
 
 ### 7. Hinzugefügte Tests
 
 - Matrixsubtraktion.
 - Skalarmultiplikation einer Matrix.
-- Bestehende Tests für Addition, Multiplikation, Determinante, Inverse, Rang und LGS-Klassifikation bleiben aktiv.
+- LGS: eindeutige Lösung mit Brüchen, inkonsistentes System, unendlich viele Lösungen, augmentierte Matrix mit Trennstrich.
+- Bestehende Tests für Addition, Multiplikation, Determinante, Inverse und Rang bleiben aktiv.
 
 ### 8. Hinzugefügte Beispielbuttons
 
 - `Matrixprodukt`: `A = (1 2; 0 1)`, `B = (2 0; 1 3)`.
 - Bestehende Matrixbeispiele setzen nun passende `B`-Matrizen.
+- LGS-Beispiele: eindeutiges 2x2, klassisches 3x3, Bruchrechnung, unendlich viele Lösungen, keine Lösung, unterbestimmtes System und 4x4-Standardfall.
 
 ## 3. Mehrdimensionale Analysis
 

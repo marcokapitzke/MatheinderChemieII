@@ -5,12 +5,13 @@ Interaktive deutschsprachige Begleitplattform zum zweiten Band des Buchprojekts.
 ## Module
 
 - Vektorrechnung & Gram-Schmidt
-- Matrizen & lineare Gleichungssysteme
+- Matrizen
+- Lineare Gleichungssysteme
 - Mehrdimensionale Analysis
 - Gewöhnliche Differentialgleichungen
 - Fourier-Transformation & Spektren
 
-Die Website übernimmt Layout, Farbwelt, Kartenlogik, Typografie und Interaktionsprinzipien von MathChem I, ist aber ein eigenständiges Projekt für `MatheinderChemieII`.
+Die Website übernimmt Layout, Farbwelt, Kartenlogik, Typografie und Interaktionsprinzipien von Band I, ist aber ein eigenständiges Projekt für `MatheinderChemieII`.
 
 ## Lokal starten
 

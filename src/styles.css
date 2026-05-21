@@ -742,7 +742,12 @@ a {
 }
 
 .module-page--matrices::after {
-  content: "Ax=b";
+  content: "A";
+  font-size: clamp(5rem, 13vw, 13rem);
+}
+
+.module-page--lgs::after {
+  content: "A|b";
   font-size: clamp(5rem, 13vw, 13rem);
 }
 
@@ -773,7 +778,7 @@ a {
 
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   border-top: 1px solid var(--line-strong);
   border-left: 1px solid var(--line-strong);
 }
@@ -895,6 +900,7 @@ a {
 
 .module-card--vectors h3,
 .module-card--matrices h3,
+.module-card--lgs h3,
 .module-card--fourier h3 {
   font-size: 1.18rem;
 }

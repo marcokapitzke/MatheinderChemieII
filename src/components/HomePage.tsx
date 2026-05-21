@@ -21,7 +21,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <p className="hero-subtitle">Der interaktive Rechner zum zweiten Band.</p>
             <p className="hero-copy">
               Ein digitales Mathematik-Labor für Standardaufgaben aus dem naturwissenschaftlichen Grundstudium: Vektoren, Matrizen,
-              Differentialgleichungen, mehrdimensionale Analysis und Fourier-Transformation.
+              lineare Gleichungssysteme, Differentialgleichungen, mehrdimensionale Analysis und Fourier-Transformation.
             </p>
             <div className="hero-actions">
               <button type="button" className="button button-primary" onClick={() => onNavigate("vectors")}>
@@ -43,7 +43,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <BookMarked size={24} />
           <div>
             <h2>Der interaktive Rechner zum zweiten Band.</h2>
-            <p>Lineare Algebra, Analysis im Raum, Differentialgleichungen und Spektren in einem konsistenten digitalen Lernraum.</p>
+          <p>Lineare Algebra, Gauß-Verfahren, Analysis im Raum, Differentialgleichungen und Spektren in einem konsistenten digitalen Lernraum.</p>
           </div>
         </div>
         <div className="book-panel book-panel--disabled" aria-label="Buch erscheint bald">
@@ -60,7 +60,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="section-shell module-section" aria-labelledby="module-title">
         <div className="section-heading">
           <p className="eyebrow">Module</p>
-          <h2 id="module-title">Fünf Rechner, ein zweiter mathematischer Lernraum.</h2>
+          <h2 id="module-title">Sechs Rechner, ein zweiter mathematischer Lernraum.</h2>
         </div>
         <div className="module-grid">
           {modules.map((module, index) => (
@@ -122,8 +122,15 @@ function renderModuleTitle(id: RouteId, title: string) {
   if (id === "matrices") {
     return (
       <>
-        <span className="title-line title-line--keep">Matrizen &</span>
-        <span className="title-line">lineare Gleichungssysteme</span>
+        <span className="title-line">Matrizen</span>
+      </>
+    );
+  }
+  if (id === "lgs") {
+    return (
+      <>
+        <span className="title-line title-line--keep">Lineare</span>
+        <span className="title-line">Gleichungssysteme</span>
       </>
     );
   }

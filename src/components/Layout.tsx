@@ -113,7 +113,7 @@ function extractCounterNumber(value: unknown, depth = 0): number | null {
 function shortNavTitle(title: string) {
   return title
     .replace("Vektorrechnung & Gram-Schmidt", "Vektoren")
-    .replace("Matrizen & lineare Gleichungssysteme", "Matrizen")
+    .replace("Lineare Gleichungssysteme", "LGS")
     .replace("Mehrdimensionale Analysis", "Analysis")
     .replace("Gewöhnliche Differentialgleichungen", "DGL")
     .replace("Fourier-Transformation & Spektren", "Fourier");
