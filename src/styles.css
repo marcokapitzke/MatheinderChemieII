@@ -89,6 +89,7 @@ a {
 .brand,
 .nav-links button,
 .nav-note,
+.visitor-counter,
 .quiet-link,
 .button,
 .icon-button,
@@ -119,7 +120,8 @@ a {
 }
 
 .nav-links button,
-.nav-note {
+.nav-note,
+.visitor-counter {
   border: 0;
   background: transparent;
   color: var(--muted);
@@ -134,7 +136,8 @@ a {
   background: var(--blue-soft);
 }
 
-.nav-note {
+.nav-note,
+.visitor-counter {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -142,6 +145,21 @@ a {
   border: 1px solid var(--line-strong);
   background: rgba(255, 255, 255, 0.68);
   white-space: nowrap;
+}
+
+.visitor-counter {
+  gap: 0.38rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+}
+
+.visitor-counter strong {
+  color: var(--bordeaux);
+  font-weight: 850;
+}
+
+.visitor-counter--ghost {
+  visibility: hidden;
 }
 
 .home-hero {
@@ -1642,7 +1660,8 @@ input[type="range"] {
   }
 
   .brand,
-  .nav-note {
+  .nav-note,
+  .visitor-counter {
     justify-self: start;
   }
 
@@ -1817,7 +1836,8 @@ input[type="range"] {
 
 @media (max-width: 460px) {
   .nav-links button,
-  .nav-note {
+  .nav-note,
+  .visitor-counter {
     font-size: 0.84rem;
   }
 
