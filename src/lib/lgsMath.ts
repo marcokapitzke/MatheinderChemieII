@@ -244,7 +244,7 @@ export function linearEquationsToTex(matrix: Fraction[][], unknowns: number, mod
 }
 
 function solutionTex(matrix: Fraction[][], unknowns: number, status: LinearSystemStatus, pivotColumns: number[], freeVariables: number[]) {
-  if (status === "none") return "\\text{keine Lösung}";
+  if (status === "none") return "\\varnothing";
 
   if (status === "unique") {
     const solution = solutionFromRref(matrix, unknowns);

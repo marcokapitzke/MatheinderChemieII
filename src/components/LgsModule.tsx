@@ -98,7 +98,7 @@ export function LgsModule({ onNavigate }: Props) {
             </article>
             <article className="result-card">
               <p className="eyebrow">Status</p>
-              <MathFormula block tex={statusTex(result)} />
+              <p>{statusLabel(result)}</p>
               <MathFormula block tex={`\\operatorname{rang}(\\mathbf A)=${result.rankA},\\quad \\operatorname{rang}(\\mathbf A\\mid\\vec b)=${result.rankAugmented}`} />
             </article>
           </section>
@@ -106,7 +106,7 @@ export function LgsModule({ onNavigate }: Props) {
           <section className="result-card result-card--wide">
             <p className="eyebrow">Lösung</p>
             {result.contradictionTex ? <MathFormula block tex={result.contradictionTex} /> : null}
-            <MathFormula block tex={solutionTexForDisplay(result, displayMode)} />
+            {result.solutionStatus === "none" ? <p>Das System ist inkonsistent und besitzt keine Lösung.</p> : <MathFormula block tex={solutionTexForDisplay(result, displayMode)} />}
           </section>
 
           <section className="result-card result-card--wide">
@@ -139,10 +139,10 @@ export function LgsModule({ onNavigate }: Props) {
   );
 }
 
-function statusTex(result: LgsAnalysis) {
-  if (result.solutionStatus === "unique") return "\\text{eindeutige Lösung}";
-  if (result.solutionStatus === "none") return "\\text{keine Lösung}";
-  return "\\text{unendlich viele Lösungen}";
+function statusLabel(result: LgsAnalysis) {
+  if (result.solutionStatus === "unique") return "Eindeutige Lösung";
+  if (result.solutionStatus === "none") return "Keine Lösung";
+  return "Unendlich viele Lösungen";
 }
 
 function solutionTexForDisplay(result: LgsAnalysis, displayMode: LgsDisplayMode) {
