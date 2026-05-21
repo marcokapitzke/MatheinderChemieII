@@ -38,7 +38,7 @@ export function FourierHeroScene() {
       onPointerLeave={() => setActive(false)}
       onPointerDown={() => setActive(true)}
       onClick={() => setActive(true)}
-      aria-label="Interaktive Fourier-Visualisierung: Interferogramm verwandelt sich bei Berührung in ein IR-Spektrum"
+      aria-label="Interaktive Fourier-Visualisierung: Interferogramm verwandelt sich bei Berührung in ein Spektrum"
     >
       <svg className="fourier-hero-svg" viewBox={`0 0 ${width} ${height}`} role="img" aria-hidden="true">
         <defs>
@@ -90,7 +90,7 @@ export function FourierHeroScene() {
       </svg>
       <div className="fourier-scene-state" aria-hidden="true">
         <span style={{ opacity: 1 - blend * 0.74 }}>Interferogramm</span>
-        <span style={{ opacity: 0.2 + blend * 0.8 }}>IR-Spektrum</span>
+        <span style={{ opacity: 0.2 + blend * 0.8 }}>Spektrum</span>
       </div>
     </div>
   );
