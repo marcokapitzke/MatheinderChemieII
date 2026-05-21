@@ -3,7 +3,7 @@
 Der folgende Workflow ist für automatisches GitHub-Pages-Deployment vorbereitet. GitHub akzeptiert Workflow-Dateien nur, wenn der pushende Token den Scope `workflow` besitzt. Sobald ein solcher Token verwendet wird, diese Datei als `.github/workflows/deploy.yml` speichern und pushen.
 
 ```yaml
-name: Deploy MathChem II to GitHub Pages
+name: Deploy Mathe in der (Bio-)Chemie II to GitHub Pages
 
 on:
   push:

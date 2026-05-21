@@ -1,6 +1,6 @@
 # Known Limits
 
-MathChem II ist eine stabile Version für Standardfälle. Die Website soll fachlich verlässlich, didaktisch klar und visuell hochwertig sein, aber kein universelles CAS ersetzen.
+Mathe in der (Bio-)Chemie II ist eine stabile Version für Standardfälle. Die Website soll fachlich verlässlich, didaktisch klar und visuell hochwertig sein, aber kein universelles CAS ersetzen.
 
 ## Allgemein
 

@@ -1,4 +1,4 @@
-# MathChem II
+# Mathe in der (Bio-)Chemie II
 
 Interaktive deutschsprachige Begleitplattform zum zweiten Band des Buchprojekts. Die App ist als kostenlose GitHub-Pages-Website gebaut und läuft vollständig im Browser: React, Vite, TypeScript, KaTeX, Plotly, Three.js und browserbasierte mathematische Routinen.
 

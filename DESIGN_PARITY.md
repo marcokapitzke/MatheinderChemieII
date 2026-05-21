@@ -1,6 +1,6 @@
 # Design Parity
 
-MathChem II orientiert sich bewusst an MathChem I, ohne die Inhalte von Band I zu überschreiben.
+Mathe in der (Bio-)Chemie II orientiert sich bewusst an Mathe in der (Bio-)Chemie, ohne die Inhalte von Band I zu überschreiben.
 
 ## Übernommen
 
@@ -14,7 +14,7 @@ MathChem II orientiert sich bewusst an MathChem I, ohne die Inhalte von Band I z
 
 ## Bewusst Anders
 
-- Brand: `MathChem II`
+- Brand: `Mathe in der (Bio-)Chemie II`
 - Hero-Objekt: didaktisches Wasserstoffatom statt Wassermolekül
 - Buchpanel: `Buch erscheint bald` ohne externen Springer-Link
 - Module entsprechen Band II: Vektoren, Matrizen, mehrdimensionale Analysis, DGL, Fourier

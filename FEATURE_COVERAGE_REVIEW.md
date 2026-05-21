@@ -1,6 +1,6 @@
 # Feature Coverage Review
 
-Diese Review prüft den Scope von MathChem II nach dem MECE-Prinzip: klar getrennte Fallgruppen, innerhalb des gewählten Grundstudiums-Scopes möglichst keine offensichtlichen Lücken. Ziel ist nicht ein universelles CAS, sondern ein robuster, didaktischer Standardumfang für Chemie, Biochemie, Physik und Mathematik für Naturwissenschaftler.
+Diese Review prüft den Scope von Mathe in der (Bio-)Chemie II nach dem MECE-Prinzip: klar getrennte Fallgruppen, innerhalb des gewählten Grundstudiums-Scopes möglichst keine offensichtlichen Lücken. Ziel ist nicht ein universelles CAS, sondern ein robuster, didaktischer Standardumfang für Chemie, Biochemie, Physik und Mathematik für Naturwissenschaftler.
 
 ## Entscheidungsregel
 

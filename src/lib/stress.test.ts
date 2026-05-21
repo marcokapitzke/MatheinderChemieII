@@ -8,7 +8,7 @@ const MATRIX_CASES = 1999;
 const ODE_CASES = 1997;
 const TOTAL_GENERATED_CASES = GRAM_SCHMIDT_CASES + MATRIX_CASES + ODE_CASES;
 
-describe("5.995 generated MathChem II invariant checks", () => {
+describe("5.995 generated Mathe in der (Bio-)Chemie II invariant checks", () => {
   it("checks 1.999 Gram-Schmidt cases against orthonormality invariants", () => {
     let checked = 0;
 
