@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { RotateCcw } from "lucide-react";
 import { vectorExamples, type RouteId } from "../data/modules";
-import { analyzeVectors, formatNumber, formatVector, scale, type Vector } from "../lib/vectorMath";
+import { analyzeVectors, dot, formatNumber, formatVector, norm, scale, type GramSchmidtStep, type Vector } from "../lib/vectorMath";
 import { CalculatorLayout, DetailedSteps } from "./CalculatorLayout";
 import { MathFormula } from "./MathFormula";
 import { PlotPanel, type Trace } from "./PlotPanel";
@@ -11,7 +11,58 @@ interface Props {
   onNavigate: (route: RouteId) => void;
 }
 
-const vectorTex = (name: string, index?: number) => `\\vec{${name}}${index === undefined ? "" : `_{${index}}`}`;
+const vectorTex = (name: string, index?: number | string) => `\\vec{${name}}${index === undefined ? "" : `_{${index}}`}`;
+
+function gramSchmidtText(step: GramSchmidtStep) {
+  if (step.skipped && step.index === 1) {
+    return "Der erste Vektor hat keine Länge und kann deshalb nicht normiert werden.";
+  }
+
+  if (step.skipped) {
+    return "Nach Abzug der Projektionen bleibt kein neuer orthogonaler Anteil übrig; der Vektor ist linear abhängig.";
+  }
+
+  if (!step.projections.length) {
+    return "Der erste Vektor wird als orthogonaler Startvektor übernommen und anschließend durch seine Länge normiert.";
+  }
+
+  return "Von diesem Vektor werden zuerst alle Projektionen auf die bereits gebildeten orthogonalen Vektoren abgezogen; danach wird der Rest normiert.";
+}
+
+function gramSchmidtTex(step: GramSchmidtStep) {
+  const lines = [`${vectorTex("v", step.index)}&=${formatVector(step.original)}`];
+
+  step.projections.forEach((projection, projectionIndex) => {
+    const ontoIndex = projectionIndex + 1;
+    const numerator = dot(step.original, projection.onto);
+    const denominator = dot(projection.onto, projection.onto);
+    lines.push(
+      `\\operatorname{proj}_{${vectorTex("u", ontoIndex)}}(${vectorTex("v", step.index)})&=\\frac{${formatNumber(numerator)}}{${formatNumber(denominator)}}${vectorTex("u", ontoIndex)}=${formatNumber(projection.coefficient)}\\,${formatVector(projection.onto)}=${formatVector(projection.projection)}`
+    );
+  });
+
+  if (step.projections.length === 0) {
+    lines.push(`${vectorTex("u", step.index)}&=${vectorTex("v", step.index)}=${formatVector(step.orthogonal)}`);
+  } else if (step.projections.length === 1) {
+    lines.push(`${vectorTex("u", step.index)}&=${vectorTex("v", step.index)}-\\operatorname{proj}_{${vectorTex("u", 1)}}(${vectorTex("v", step.index)})=${formatVector(step.orthogonal)}`);
+  } else {
+    lines.push(`${vectorTex("u", step.index)}&=${vectorTex("v", step.index)}-\\sum_{j=1}^{${step.index - 1}}\\operatorname{proj}_{${vectorTex("u", "j")}}(${vectorTex("v", step.index)})=${formatVector(step.orthogonal)}`);
+  }
+
+  const squaredNorm = dot(step.orthogonal, step.orthogonal);
+  const orthogonalNorm = norm(step.orthogonal);
+  lines.push(`\\left\\|${vectorTex("u", step.index)}\\right\\|&=\\sqrt{${formatNumber(squaredNorm)}}\\approx ${formatNumber(orthogonalNorm)}`);
+
+  if (step.normalized) {
+    lines.push(`${vectorTex("e", step.index)}&=\\frac{${vectorTex("u", step.index)}}{\\left\\|${vectorTex("u", step.index)}\\right\\|}=${formatVector(step.normalized)}`);
+  } else if (step.index === 1) {
+    lines.push(`${vectorTex("v", step.index)}&=\\vec 0\\quad\\Rightarrow\\quad\\text{kein Basisvektor}`);
+  } else {
+    lines.push(`${vectorTex("v", step.index)}&\\in\\operatorname{span}\\left(${Array.from({ length: step.index - 1 }, (_, index) => vectorTex("u", index + 1)).join(",")}\\right)`);
+  }
+
+  return `\\begin{aligned}${lines.join("\\\\")}\\end{aligned}`;
+}
 
 export function VectorModule({ onNavigate }: Props) {
   const [input, setInput] = useState("v1=(1,1,0), v2=(1,0,1), v3=(0,1,1)");
@@ -105,12 +156,11 @@ export function VectorModule({ onNavigate }: Props) {
               ))}
             </div>
             <DetailedSteps
+              summary="Projektionen und Normierung Schritt für Schritt anzeigen"
               steps={result.gramSchmidt.map((step) => ({
                 title: `Schritt ${step.index}`,
-                text: step.skipped
-                  ? "Der orthogonale Rest ist numerisch null; der Vektor ist linear abhängig und wird übersprungen."
-                  : "Projektionen auf die bereits gebildeten orthogonalen Vektoren werden abgezogen und danach normiert.",
-                tex: `${vectorTex("u", step.index)}=${formatVector(step.orthogonal)}${step.normalized ? `,\\quad ${vectorTex("e", step.index)}=${formatVector(step.normalized)}` : ""}`
+                text: gramSchmidtText(step),
+                tex: gramSchmidtTex(step)
               }))}
             />
           </section>
